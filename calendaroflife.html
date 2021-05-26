@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Existential Dread Inducer</title>
+    </head>
+    <body>
+        <style>
+            .box{
+                border-radius:100%;
+                width:0.5vw;
+                height:0.5vw;
+                display: inline-block;
+                background-color:whitesmoke;
+                margin:0.05vw;
+                box-sizing: border-box;
+                position:relative;
+            }
+            @keyframes pulse{
+                0%{
+                    transform: scale(5);
+                    opacity: 0.5;
+                    z-index:999;
+                }
+                50%{
+                    transform: scale(1);
+                    opacity: 1;
+                    z-index:999;
+                }
+                100%{
+                    transform: scale(5);
+                    opacity: 0.5;
+                    z-index:999;
+                }
+            }
+            .row{
+                width:100%;
+                display:block;
+                clear:both;
+                text-align:center;
+                font-size:0;
+            }
+            h1,p{
+                font-family: Bahnschrift, "Segoe UI", 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;;
+                text-align: center;
+                margin:4px;
+            }
+            #weeks{
+                color:rgb(26, 26, 26);
+                font-weight: 200;
+            }
+            #date{
+                border-radius: 5px;
+                font-family: Bahnschrift, "Segoe UI", 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+                border:none;
+                background-color: whitesmoke;
+                padding:5px;
+            }
+            #credit,a{
+                color:rgb(168, 168, 168);
+            }
+        </style>
+        <br>
+        <h1>Existential Dread Inducer</h1>
+        <p>Date of Birth: <input type=date id=date onchange="setWeeks()"></p>
+        <br>
+        <div id=container></div>
+        <h1 id=weeks></h1>
+        <p id=credit>inspired by <a href="https://www.youtube.com/watch?v=JXeJANDKwDc">kurzgesagt</a>; made by <a href="https://github.com/knosmos">knosmos</a></p>
+        <script>
+            let c = document.getElementById("container");
+            let text = "";
+            for (let i=0; i<52; i++){
+                text += "<div class=row>";
+                for (let j=0; j<100; j++){
+                    text += `<span id="r${i}c${j}" class=box></span>`;
+                }
+                text += "</div>";
+            }
+            c.innerHTML = text;
+            function setWeeks(){
+                let birth = new Date(document.getElementById("date").value);
+                let now = new Date();
+                let diffTime = Math.abs(now-birth);
+                let diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+                console.log(diffWeeks);
+                if (diffWeeks <= 3000){
+                    for (let j=0; j<100; j++){
+                        for (let i=0; i<52; i++){
+                            let circle = document.getElementById(`r${i}c${j}`);
+                            if (j*52 + i < diffWeeks){
+                                circle.style.backgroundColor = "black";
+                                circle.style.animation = "none";
+                            }
+                            else if (j*52 + i == diffWeeks){
+                                circle.style.backgroundColor = "red";
+                                circle.style.animation = "pulse 2s infinite";
+                            }
+                            else{
+                                circle.style.backgroundColor = "whitesmoke";
+                                circle.style.animation = "none";
+                            }
+                        }
+                    }
+                    document.getElementById("weeks").innerHTML = `${diffWeeks} weeks used, ${5400-diffWeeks} remaining`;                    
+                }
+            }
+            setWeeks();
+        </script>
+    </body>
+</html>
